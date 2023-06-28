@@ -1,0 +1,21 @@
+using System;
+using UnityEngine;
+using Unity.Entities;
+
+#ROOTNAMESPACEBEGIN#
+public partial class #SCRIPTNAME# : SystemBase
+{
+    
+    protected override void OnCreate()
+    {
+    }
+    
+    protected override void OnUpdate()
+    {
+    }
+    
+    protected override void OnDestroy()
+    {
+    }
+}
+#ROOTNAMESPACEEND#

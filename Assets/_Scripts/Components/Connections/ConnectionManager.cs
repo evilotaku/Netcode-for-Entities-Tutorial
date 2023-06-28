@@ -1,5 +1,7 @@
 using Unity.Entities;
 using Unity.NetCode;
+using Unity.Networking.Transport;
+using Unity.Physics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +10,7 @@ public class ConnectionManager : MonoBehaviour
 
     public string Address;
     public ushort Port;
+    public string Scene;
    
 
     // Start is called before the first frame update
@@ -25,7 +28,7 @@ public class ConnectionManager : MonoBehaviour
         DestroyLocalWorld();
         World.DefaultGameObjectInjectionWorld ??= server;
 
-        SceneManager.LoadSceneAsync("Game");
+        SceneManager.LoadSceneAsync(Scene);
         {
             using var drvQuery = server.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
             drvQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(ClientServerBootstrap.DefaultListenAddress.WithPort(Port));
@@ -43,7 +46,22 @@ public class ConnectionManager : MonoBehaviour
         }
 
         
-    }   
+    }
+
+    [ContextMenu("Start Client")]
+    public void StartClient()
+    {
+        var client = ClientServerBootstrap.CreateClientWorld("ClientWorld");
+
+        DestroyLocalWorld();
+        World.DefaultGameObjectInjectionWorld ??= client;
+
+        using var drvQuery = client.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
+        drvQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(client.EntityManager, NetworkEndpoint.Parse(Address,Port));
+
+
+    }
+
 
     // Update is called once per frame
     void Update()

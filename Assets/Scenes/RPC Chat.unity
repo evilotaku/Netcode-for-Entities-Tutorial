@@ -67,9 +67,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -570,8 +567,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -397, y: 14.568}
-  m_SizeDelta: {x: -835.3567, y: -84.073}
+  m_AnchoredPosition: {x: -397, y: 14.565979}
+  m_SizeDelta: {x: -1836.9, y: -701.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &686503652
 MonoBehaviour:

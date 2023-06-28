@@ -11,6 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 24cd7d0198e427a45bdef8f63c0414fc
+  - enabled: 1
+    path: Assets/Scenes/RPC Chat.unity
+    guid: 6241f4ec7b4f44f47bf6345b54b2d4e3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: aabb67b1d1dd5b34189c1235b4aa82ac,
       type: 2}
+  m_UseUCBPForAssetBundles: 0

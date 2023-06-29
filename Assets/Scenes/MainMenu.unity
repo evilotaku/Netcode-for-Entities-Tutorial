@@ -130,7 +130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 148036454}
   - component: {fileID: 148036453}
-  - component: {fileID: 148036455}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -150,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c2952bd419ed4d4fb6932fe122365a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Address: 
+  Address: 192.168.1.14
   Port: 7979
   Scene: RPC Chat
 --- !u!4 &148036454
@@ -168,18 +167,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &148036455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148036452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e2d4d4d772aa8445917169c633c2ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,7 @@ public partial class ClientChatSystem : SystemBase
     BeginSimulationEntityCommandBufferSystem CommandBufferSystem;
     
     protected override void OnCreate()
-    {
-        RequireForUpdate<EnableRPC>();
+    {       
         RequireForUpdate<NetworkId>();
         CommandBufferSystem = World.GetOrCreateSystemManaged<BeginSimulationEntityCommandBufferSystem>();
     }
@@ -30,24 +29,25 @@ public partial class ClientChatSystem : SystemBase
         }
                 
         var buffer = CommandBufferSystem.CreateCommandBuffer();
-        var connections = GetComponentLookup<NetworkId>(true);
+        var connectionArray = GetComponentLookup<NetworkId>(true);
         FixedString32Bytes worldName = World.Name;
-        Entities.WithName("ReceiveChatMessage").ForEach(
-            (Entity entity, ref ReceiveRpcCommandRequest rpcCmd, ref ChatMessage chat) =>
-            {
-                buffer.DestroyEntity(entity);
-                // Not thread safe, so all UI logic is kept on main thread
-                ChatBox.Messages.Enqueue(chat.Message);
-            }).Run();
-        Entities.WithName("RegisterUser").WithReadOnly(connections).ForEach(
+
+        Entities.WithName("RegisterUser").WithReadOnly(connectionArray).ForEach(
             (Entity entity, ref ReceiveRpcCommandRequest rpcCmd, ref ChatUser user) =>
             {
-                var conId = connections[rpcCmd.SourceConnection].Value;
-                UnityEngine.Debug.Log(
+                var conId = connectionArray[rpcCmd.SourceConnection].Value;
+                Debug.Log(
                     $"[{worldName}] Received {user.UserData} from connection {conId}");
                 buffer.DestroyEntity(entity);
                 ChatBox.Users.Enqueue(user.UserData);
             }).Run();
+
+        Entities.WithName("ReceiveChatMessage").ForEach(
+        (Entity entity, ref ReceiveRpcCommandRequest rpcCmd, ref ChatMessage chat) =>
+        {
+            buffer.DestroyEntity(entity);            
+            ChatBox.Messages.Enqueue(chat.Message);
+        }).Run();
 
         CommandBufferSystem.AddJobHandleForProducer(Dependency);
     }

@@ -8,11 +8,12 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.UIElements;
 using JetBrains.Annotations;
+using Unity.Services.Relay.Models;
 
 public class ChatBox : MonoBehaviour
 {
     public static readonly NativeQueue<FixedString128Bytes> Messages = new(Allocator.Persistent);
-    public static readonly NativeQueue<int> Users = new(Allocator.Persistent);
+    public static readonly NativeQueue<int> Users= new(Allocator.Persistent);
 
     public TMP_InputField ChatInput;
     public TMP_Text ChatPrefab, UserPrefab;
@@ -88,9 +89,9 @@ public class ChatBox : MonoBehaviour
     {
         if(world == null || !world.IsCreated) return;
 
-        var entity = world.EntityManager.CreateEntity();
-        world.EntityManager.AddComponentData(entity, new ChatMessage() { Message = msg });
-        world.EntityManager.AddComponent<SendRpcCommandRequest>(entity);
+        var entity = world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(ChatMessage));
+        world.EntityManager.SetComponentData(entity, new ChatMessage() { Message = msg });
+       
         if(targetEntity != Entity.Null) 
         {
             world.EntityManager.SetComponentData(entity,

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,9 +5,6 @@ using Unity.NetCode;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.UIElements;
-using JetBrains.Annotations;
-using Unity.Services.Relay.Models;
 
 public class ChatBox : MonoBehaviour
 {

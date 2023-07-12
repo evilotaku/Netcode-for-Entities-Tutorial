@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.NetCode;
 using Unity.Entities;
 using Unity.Burst;
 using Unity.Collections;
-using Unity.Physics;
 
 public struct GoInGameRequest : IRpcCommand { }
 
@@ -18,7 +15,7 @@ public partial struct GoInGameClientSystem : ISystem
         var builder = new EntityQueryBuilder(Allocator.Temp)
             .WithAll<NetworkId>()
             .WithNone<NetworkStreamInGame>();
-        state.RequireForUpdate<CubeSpawner>();
+        state.RequireForUpdate<PlayerPrefab>();
         state.RequireForUpdate(state.GetEntityQuery(builder));
 
     }
@@ -49,7 +46,7 @@ public partial struct GoInGameServerSystem : ISystem
         var builder = new EntityQueryBuilder(Allocator.Temp)
             .WithAll<GoInGameRequest>()
             .WithAll<ReceiveRpcCommandRequest>();
-        state.RequireForUpdate<CubeSpawner>();
+        state.RequireForUpdate<PlayerPrefab>();
         state.RequireForUpdate(state.GetEntityQuery(builder));
         networkIdFromEntity = state.GetComponentLookup<NetworkId>(true);
     }
@@ -57,7 +54,7 @@ public partial struct GoInGameServerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var prefab = SystemAPI.GetSingleton<CubeSpawner>().Cube;
+        var prefab = SystemAPI.GetSingleton<PlayerPrefab>().Player;
         state.EntityManager.GetName(prefab, out FixedString64Bytes prefabName);
         FixedString128Bytes worldName = state.WorldUnmanaged.Name;
 

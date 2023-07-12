@@ -1,14 +1,10 @@
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.NetCode;
-using Unity.Physics;
-using Unity.Physics.Systems;
-using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
-//[UpdateAfter(typeof(PhysicsSimulationGroup))]
+[WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 public partial class PlayerInputSystem : SystemBase
 {
     DefaultInputActions input;
@@ -19,27 +15,50 @@ public partial class PlayerInputSystem : SystemBase
         input = new();
         input.Enable();
         actions = input.Player;
+        RequireForUpdate<PlayerInput>();
+        RequireForUpdate<NetworkStreamInGame>();
     }
-
 
     protected override void OnUpdate()
     {
         InputSystem.Update();
         Vector2 movement = actions.Move.ReadValue<Vector2>();
         Vector2 look = actions.Look.ReadValue<Vector2>();
-        float fire = actions.Fire.ReadValue<float>();
+        bool fire = actions.Fire.WasPerformedThisFrame();
 
-        foreach (var (playerInput, entity) in SystemAPI.Query<RefRW<PlayerInput>>()
-            .WithAll<GhostOwnerIsLocal>()
-            .WithEntityAccess())
+        foreach (var playerInput in SystemAPI.Query<RefRW<PlayerInput>>()
+            .WithAll<GhostOwnerIsLocal>())
         {
             playerInput.ValueRW.movement = movement;
             playerInput.ValueRW.look = look;
-            playerInput.ValueRW.fire = fire;            
+            if (fire) playerInput.ValueRW.fire.Set();
         }
+    }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        input.Disable();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* if(Mouse.current.leftButton.wasPressedThisFrame)
  {

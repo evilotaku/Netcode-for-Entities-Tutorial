@@ -16,7 +16,7 @@ public class ConnectionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        StartHost();
     }
 
     [ContextMenu("Start Host")]

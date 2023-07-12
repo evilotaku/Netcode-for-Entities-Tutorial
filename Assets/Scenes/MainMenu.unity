@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Address: 192.168.1.14
   Port: 7979
-  Scene: RPC Chat
+  Scene: Physics
 --- !u!4 &148036454
 Transform:
   m_ObjectHideFlags: 0

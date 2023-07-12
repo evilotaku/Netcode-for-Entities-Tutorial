@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
@@ -10,8 +8,7 @@ public struct PlayerInput : IInputComponentData
 {
     public float2 movement;
     public float2 look;
-    public float2 clickPos;  
-    public float fire;
+    public InputEvent fire;
 }
 
 public class PlayerInputAuthoring : MonoBehaviour

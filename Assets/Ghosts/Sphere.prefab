@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2455026727051942586}
   - component: {fileID: 1060519653178460090}
   - component: {fileID: 1996625156881402113}
-  - component: {fileID: 425270505983940538}
   - component: {fileID: 1299128308695918538}
   m_Layer: 0
   m_Name: Sphere
@@ -102,10 +101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultGhostMode: 0
-  SupportedGhostModes: 3
+  SupportedGhostModes: 1
   OptimizationMode: 0
   Importance: 1
-  prefabId: 
+  prefabId: 9d4775f7d8ddf4a458e3ec518de0c7ef
   HasOwner: 0
   SupportAutoCommandTarget: 1
   TrackInterpolationDelay: 0
@@ -171,21 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e7c27a837aa3a4eacbeeda9bbdf26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Velocity: 1
---- !u!114 &425270505983940538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136373128892221978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75124f29cee64eb4c97a28a8860751e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 6957239384947981202, guid: 4066c0cc727490f4ca712fb6bacd95f6, type: 3}
-  MaxDistance: 5
+  Velocity: 3
 --- !u!114 &1299128308695918538
 MonoBehaviour:
   m_ObjectHideFlags: 0

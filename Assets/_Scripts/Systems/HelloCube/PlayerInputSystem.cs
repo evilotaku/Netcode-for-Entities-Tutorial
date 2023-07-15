@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
+[AlwaysSynchronizeSystem]
 public partial class PlayerInputSystem : SystemBase
 {
     DefaultInputActions input;
@@ -24,17 +25,21 @@ public partial class PlayerInputSystem : SystemBase
         InputSystem.Update();
         Vector2 movement = actions.Move.ReadValue<Vector2>();
         Vector2 look = actions.Look.ReadValue<Vector2>();
-        bool fire = actions.Fire.WasPerformedThisFrame();
+        bool fire = actions.Fire.ReadValue<float>() != 0;
 
         foreach (var playerInput in SystemAPI.Query<RefRW<PlayerInput>>()
             .WithAll<GhostOwnerIsLocal>())
         {
+            playerInput.ValueRW = default;
             playerInput.ValueRW.movement = movement;
             playerInput.ValueRW.look = look;
-            if (fire) playerInput.ValueRW.fire.Set();
+            if (fire)
+            {
+                Debug.Log("Mouse Click!");
+                playerInput.ValueRW.fire.Set();
+            }
         }
     }
-
     protected override void OnDestroy()
     {
         base.OnDestroy();

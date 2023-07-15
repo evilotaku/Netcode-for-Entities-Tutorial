@@ -1,47 +1,47 @@
+using UnityEngine;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.NetCode;
 using Unity.Physics;
+using Unity.Physics.Extensions;
 using Unity.Transforms;
 
 [BurstCompile]
-[UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
-[WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation | WorldSystemFilterFlags.ClientSimulation)]
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
 public partial struct AttractorSystem : ISystem
 {   
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Moving>();
-        state.RequireForUpdate<Target>();
+        state.RequireForUpdate<MoveSpeed>();        
     }
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        NativeList<float3> players = new(Allocator.Temp);
-        foreach (var player in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<Player>())
+        var physics = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+        var velocites = SystemAPI.GetComponentLookup<PhysicsVelocity>();
+        foreach (var (transform, speed, velocity, mass) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<MoveSpeed>,RefRW<PhysicsVelocity>, PhysicsMass>())
         {
-            players.Add(player.ValueRO.Position);
-        }
+            foreach (var (player, input) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<PlayerInput>>().WithAll<Player>())
+            {                
+                var direction = math.normalize(player.ValueRO.Position - transform.ValueRO.Position);
 
-        foreach (var (target, transform, moving, velocity) in SystemAPI.Query<RefRO<Target>, RefRO<LocalTransform>, RefRO<Moving>, RefRW<PhysicsVelocity>>())
-        {
-            foreach (var player in players)
-            {
-                var originPosition = transform.ValueRO.Position;
-                var direction = math.normalize(player - originPosition);
+                var distance = math.distance(player.ValueRO.Position, transform.ValueRO.Position);
 
-                if (math.distance(player, originPosition) < target.ValueRO.MaxDistance)
-                    velocity.ValueRW.Linear = moving.ValueRO.Velocity * direction;
+                if (distance > 2)
+                { 
+                    velocity.ValueRW.ApplyLinearImpulse(mass,speed.ValueRO.Velocity * direction * SystemAPI.Time.DeltaTime);
+                }
                 else
+                {
                     velocity.ValueRW.Linear = new float3(0, 0, 0);
+                }
+
+               
             }
         }
-
-        players.Dispose();
-       
     }
     [BurstCompile]
     public void OnDestroy(ref SystemState state)

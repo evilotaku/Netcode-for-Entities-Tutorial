@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-public struct Moving : IComponentData
+public struct MoveSpeed : IComponentData
 {
     public float Velocity;
 }
@@ -12,7 +12,7 @@ public class VelocityAuthoring : MonoBehaviour
 	{
 		public override void Bake(VelocityAuthoring authoring)
 		{
-			AddComponent(GetEntity(TransformUsageFlags.Dynamic), new Moving
+			AddComponent(GetEntity(TransformUsageFlags.Dynamic), new MoveSpeed
 			{
 				Velocity = authoring.Velocity
 			});

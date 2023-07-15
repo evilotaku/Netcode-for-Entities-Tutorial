@@ -79,7 +79,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 407632721914263957, guid: 4c6daa68f46a0ab45848a37664213ad6,
         type: 3}
-      insertIndex: -1
+      insertIndex: 4
       addedObject: {fileID: -5791756224771824048}
   m_SourcePrefab: {fileID: 100100000, guid: 4c6daa68f46a0ab45848a37664213ad6, type: 3}
 --- !u!1 &6957239384947981202 stripped
@@ -111,7 +111,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

@@ -1,7 +1,6 @@
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
-using Unity.Physics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

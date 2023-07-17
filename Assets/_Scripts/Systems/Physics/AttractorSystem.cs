@@ -20,17 +20,15 @@ public partial struct AttractorSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var physics = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        var velocites = SystemAPI.GetComponentLookup<PhysicsVelocity>();
+        
         foreach (var (transform, speed, velocity, mass) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<MoveSpeed>,RefRW<PhysicsVelocity>, PhysicsMass>())
         {
             foreach (var (player, input) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<PlayerInput>>().WithAll<Player>())
             {                
                 var direction = math.normalize(player.ValueRO.Position - transform.ValueRO.Position);
-
                 var distance = math.distance(player.ValueRO.Position, transform.ValueRO.Position);
 
-                if (distance > 2)
+                if (distance > 1)
                 { 
                     velocity.ValueRW.ApplyLinearImpulse(mass,speed.ValueRO.Velocity * direction * SystemAPI.Time.DeltaTime);
                 }

@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.NetCode;
-using Unity.Entities;
-using Unity.Networking.Transport;
 
 [UnityEngine.Scripting.Preserve]
 public class GameBootStrap : ClientServerBootstrap

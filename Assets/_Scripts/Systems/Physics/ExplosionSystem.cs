@@ -17,10 +17,6 @@ public partial struct ExplosionSystem : ISystem
         state.RequireForUpdate<Exploded>();
     }
     [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-    }
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         var ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();

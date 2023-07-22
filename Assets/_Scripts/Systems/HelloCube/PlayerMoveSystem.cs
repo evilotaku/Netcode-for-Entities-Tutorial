@@ -5,50 +5,87 @@ using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Physics;
 using Unity.Physics.Extensions;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 
 
-[UpdateInGroup(typeof(PredictedFixedStepSimulationSystemGroup))]
-[WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-[BurstCompile]
-public partial struct PlayerMoveSystem : ISystem
-{    
-    public void OnCreate(ref SystemState state)
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
+[UpdateBefore(typeof(PhysicsInitializeGroup))]
+public partial class PlayerMoveSystem : SystemBase
+{
+
+    protected override void OnCreate()
     {
-        state.RequireForUpdate<PlayerInput>();
+        RequireForUpdate<PlayerInput>();
     }
 
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
-    {           
-        var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+    protected override void OnUpdate()
+    {
+        var tick = SystemAPI.GetSingleton<NetworkTime>().ServerTick;
         var ecbSystem = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>();
-        var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
-        foreach (var (transform, input, speed, velocity,mass) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<PlayerInput>,RefRO<MoveSpeed>, RefRW<PhysicsVelocity>, PhysicsMass>().WithAll<Simulate>())
+        
+        new PlayerMoveJob { tick = tick }.ScheduleParallel();
+        new PlayerJumpJob
         {
-            float2 moveInput = input.ValueRO.movement;
-            moveInput = math.normalizesafe(moveInput) * speed.ValueRO.Velocity;
-            //transform.ValueRW.Position += new float3(moveInput.x, 0, moveInput.y);
-            velocity.ValueRW.ApplyLinearImpulse(mass, new float3(moveInput.x, 0, moveInput.y));
-            
-            if (input.ValueRO.fire.IsSet)
+            tick = tick,
+            physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>(),
+            ecb = ecbSystem.CreateCommandBuffer(World.Unmanaged)
+        }.Schedule();
+    }
+}
+
+[BurstCompile]
+[WithAll(typeof(Simulate))]
+public partial struct PlayerMoveJob : IJobEntity
+{
+    public NetworkTick tick;
+    
+    [BurstCompile]
+    void Execute(DynamicBuffer<PlayerInput> inputBuffer, ref PhysicsVelocity velocity, in MoveSpeed speed)
+    {
+        inputBuffer.GetDataAtTick(tick, out var input);
+        float3 direction = new(input.movement.x, 0, input.movement.y);
+        if (math.lengthsq(direction) > 0.5)
+        {
+            direction = math.normalize(direction);
+            direction *= speed.Velocity;
+        }
+
+        velocity.Linear = direction;
+    }
+}
+
+[BurstCompile]
+[WithAll(typeof(Simulate))]
+public partial struct PlayerJumpJob : IJobEntity
+{
+    public NetworkTick tick;
+    public PhysicsWorldSingleton physicsWorld;
+    public EntityCommandBuffer ecb;
+
+    void Execute(ref PhysicsVelocity velocity, DynamicBuffer<PlayerInput> inputBuffer, in PhysicsMass mass, ref LocalTransform transform)
+    {
+        inputBuffer.GetDataAtTick(tick, out var input);
+        float2 moveInput = input.movement;
+
+        if (input.fire.IsSet)
+        {
+            var objs = new NativeList<DistanceHit>(Allocator.Temp);
+            if (physicsWorld.OverlapSphere(transform.Position, 5.0f, ref objs, CollisionFilter.Default))
             {
-                var objs = new NativeList<DistanceHit>(Allocator.Temp);
-                if (physicsWorld.OverlapSphere(transform.ValueRO.Position, 5.0f, ref objs, CollisionFilter.Default))
-                {                    
-                    for (int i = 0; i < objs.Length; i++)
+                for (int i = 0; i < objs.Length; i++)
+                {
+                    ecb.AddComponent(objs[i].Entity, ComponentType.ReadOnly<Exploded>());
+                    ecb.SetComponent(objs[i].Entity, new Exploded
                     {
-                        ecb.AddComponent(objs[i].Entity, typeof(Exploded));
-                        ecb.SetComponent(objs[i].Entity, new Exploded
-                        {
-                            Position = transform.ValueRO.Position,
-                            Force = 5f,
-                            Radius = 5.0f
-                        });                        
-                    }
+                        Position = transform.Position,
+                        Force = 5f,
+                        Radius = 5.0f
+                    });
                 }
-                velocity.ValueRW.ApplyLinearImpulse(mass, new float3(moveInput.x, 10f, moveInput.y));
             }
+            velocity.ApplyLinearImpulse(mass, new float3(moveInput.x, 10f, moveInput.y));
         }
     }
 }
+

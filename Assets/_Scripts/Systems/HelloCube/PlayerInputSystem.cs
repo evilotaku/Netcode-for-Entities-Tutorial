@@ -3,9 +3,8 @@ using Unity.NetCode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[UpdateInGroup(typeof(GhostInputSystemGroup))]
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
-[AlwaysSynchronizeSystem]
+[UpdateInGroup(typeof(GhostInputSystemGroup))]
 public partial class PlayerInputSystem : SystemBase
 {
     DefaultInputActions input;
@@ -17,28 +16,25 @@ public partial class PlayerInputSystem : SystemBase
         input.Enable();
         actions = input.Player;
         RequireForUpdate<PlayerInput>();
-        RequireForUpdate<NetworkStreamInGame>();
+        RequireForUpdate<NetworkId>();
     }
 
     protected override void OnUpdate()
     {
-        InputSystem.Update();
-        Vector2 movement = actions.Move.ReadValue<Vector2>();
-        Vector2 look = actions.Look.ReadValue<Vector2>();
-        bool fire = actions.Fire.ReadValue<float>() != 0;
+        if (!SystemAPI.TryGetSingletonEntity<PlayerInput>(out var localInputEntity)) return;
 
-        foreach (var playerInput in SystemAPI.Query<RefRW<PlayerInput>>()
-            .WithAll<GhostOwnerIsLocal>())
-        {
-            playerInput.ValueRW = default;
-            playerInput.ValueRW.movement = movement;
-            playerInput.ValueRW.look = look;
-            if (fire)
-            {
-                Debug.Log("Mouse Click!");
-                playerInput.ValueRW.fire.Set();
-            }
-        }
+        InputSystem.Update();
+
+        var input = default(PlayerInput);
+        input.Tick = SystemAPI.GetSingleton<NetworkTime>().ServerTick;
+
+        input.movement = actions.Move.ReadValue<Vector2>();
+        input.look = actions.Look.ReadValue<Vector2>();
+        if (actions.Fire.ReadValue<float>() != 0)
+            input.fire.Set();
+
+        var buffer = EntityManager.GetBuffer<PlayerInput>(localInputEntity);
+        buffer.AddCommandData(input);
     }
     protected override void OnDestroy()
     {

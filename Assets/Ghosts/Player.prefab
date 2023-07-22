@@ -119,7 +119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407632721914263957}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -137,7 +137,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &4147154103159619811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e7c27a837aa3a4eacbeeda9bbdf26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Velocity: 15
+  Velocity: 4
 --- !u!114 &8213504661255638371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +206,6 @@ MonoBehaviour:
   prefabId: 4c6daa68f46a0ab45848a37664213ad6
   HasOwner: 1
   SupportAutoCommandTarget: 1
-  TrackInterpolationDelay: 0
+  TrackInterpolationDelay: 1
   GhostGroup: 0
   UsePreSerialization: 0

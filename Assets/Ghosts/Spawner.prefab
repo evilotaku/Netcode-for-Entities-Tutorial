@@ -49,5 +49,5 @@ MonoBehaviour:
     x: 10
     y: 10
     z: 10
-  count: 500
+  count: 10
   randomSeedOffset: 0

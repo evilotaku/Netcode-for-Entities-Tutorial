@@ -3,12 +3,15 @@ using Unity.Mathematics;
 using Unity.NetCode;
 using UnityEngine;
 
-[GhostComponent(PrefabType = GhostPrefabType.AllPredicted)]
-public struct PlayerInput : IInputComponentData
+[GhostComponent(PrefabType = GhostPrefabType.AllPredicted, OwnerSendType = SendToOwnerType.SendToNonOwner)]
+public struct PlayerInput : ICommandData
 {
-    public float2 movement;
-    public float2 look;
-    public InputEvent fire;
+    [GhostField] public NetworkTick Tick { get; set; }
+    [GhostField] public float2 movement;
+    [GhostField] public float2 look;
+    [GhostField] public InputEvent fire;
+
+    
 }
 
 public class PlayerInputAuthoring : MonoBehaviour
@@ -17,7 +20,7 @@ public class PlayerInputAuthoring : MonoBehaviour
     {
         public override void Bake(PlayerInputAuthoring authoring)
         {
-            AddComponent(GetEntity(TransformUsageFlags.Dynamic), new PlayerInput());
+            AddBuffer<PlayerInput>(GetEntity(TransformUsageFlags.Dynamic));
         }
     }
 }

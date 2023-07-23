@@ -54,7 +54,7 @@ public class ConnectionManager : MonoBehaviour
 
         DestroyLocalWorld();
         World.DefaultGameObjectInjectionWorld ??= client;
-
+        SceneManager.LoadSceneAsync(Scene);
         using var drvQuery = client.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
         drvQuery.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(client.EntityManager, NetworkEndpoint.Parse(Address,Port));
 

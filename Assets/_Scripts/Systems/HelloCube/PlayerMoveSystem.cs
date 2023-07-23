@@ -25,7 +25,7 @@ public partial class PlayerMoveSystem : SystemBase
         var ecbSystem = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>();
         
         new PlayerMoveJob { tick = tick }.ScheduleParallel();
-        new PlayerJumpJob
+        new PlayerExplodeJob
         {
             tick = tick,
             physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>(),
@@ -57,7 +57,7 @@ public partial struct PlayerMoveJob : IJobEntity
 
 [BurstCompile]
 [WithAll(typeof(Simulate))]
-public partial struct PlayerJumpJob : IJobEntity
+public partial struct PlayerExplodeJob : IJobEntity
 {
     public NetworkTick tick;
     public PhysicsWorldSingleton physicsWorld;
@@ -84,7 +84,7 @@ public partial struct PlayerJumpJob : IJobEntity
                     });
                 }
             }
-            velocity.ApplyLinearImpulse(mass, new float3(moveInput.x, 10f, moveInput.y));
+            //velocity.ApplyLinearImpulse(mass, new float3(moveInput.x, 10f, moveInput.y));
         }
     }
 }

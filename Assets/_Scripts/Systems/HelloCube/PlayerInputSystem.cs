@@ -20,21 +20,28 @@ public partial class PlayerInputSystem : SystemBase
     }
 
     protected override void OnUpdate()
-    {
-        if (!SystemAPI.TryGetSingletonEntity<PlayerInput>(out var localInputEntity)) return;
-
+    {        
         InputSystem.Update();
+        Vector2 movement = actions.Move.ReadValue<Vector2>();
+        Vector2 look = actions.Look.ReadValue<Vector2>();
+        float fire = actions.Fire.ReadValue<float>();
 
-        var input = default(PlayerInput);
-        input.Tick = SystemAPI.GetSingleton<NetworkTime>().ServerTick;
-
-        input.movement = actions.Move.ReadValue<Vector2>();
-        input.look = actions.Look.ReadValue<Vector2>();
-        if (actions.Fire.ReadValue<float>() != 0)
-            input.fire.Set();
-
-        var buffer = EntityManager.GetBuffer<PlayerInput>(localInputEntity);
-        buffer.AddCommandData(input);
+        foreach (var (inputBuffer, entity) in SystemAPI.Query<DynamicBuffer<PlayerInput>>()
+            .WithAll<GhostOwnerIsLocal>()
+            .WithEntityAccess())
+        {
+            PlayerInput input = default;
+            input.Tick = SystemAPI.GetSingleton<NetworkTime>().ServerTick;
+            input.movement = movement;
+            input.look = look; 
+            if (actions.Fire.ReadValue<float>() != 0)
+            {
+                Debug.Log("Boom!");
+                input.fire.Set();
+            }
+            var buffer = EntityManager.GetBuffer<PlayerInput>(entity);
+            buffer.AddCommandData(input);
+        };  
     }
     protected override void OnDestroy()
     {

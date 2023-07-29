@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.NetCode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,8 +8,10 @@ using UnityEngine.InputSystem;
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
 public partial class PlayerInputSystem : SystemBase
 {
-    DefaultInputActions input;
-    DefaultInputActions.PlayerActions actions;
+    PlayerControls input;
+    PlayerControls.PlayerActions actions;
+    bool hasFired;
+    Vector2 _Look;
 
     protected override void OnCreate()
     {
@@ -17,30 +20,38 @@ public partial class PlayerInputSystem : SystemBase
         actions = input.Player;
         RequireForUpdate<PlayerInput>();
         RequireForUpdate<NetworkId>();
+        actions.Look.performed += (ctx) =>
+        {            
+            _Look = ctx.ReadValue<Vector2>();
+        };
     }
 
     protected override void OnUpdate()
     {        
         InputSystem.Update();
-        Vector2 movement = actions.Move.ReadValue<Vector2>();
-        Vector2 look = actions.Look.ReadValue<Vector2>();
-        float fire = actions.Fire.ReadValue<float>();
-
-        foreach (var (inputBuffer, entity) in SystemAPI.Query<DynamicBuffer<PlayerInput>>()
-            .WithAll<GhostOwnerIsLocal>()
-            .WithEntityAccess())
+        foreach (var input in SystemAPI.Query<RefRW<PlayerInput>>()
+            .WithAll<GhostOwnerIsLocal>())
         {
-            PlayerInput input = default;
-            input.Tick = SystemAPI.GetSingleton<NetworkTime>().ServerTick;
-            input.movement = movement;
-            input.look = look; 
-            if (actions.Fire.ReadValue<float>() != 0)
+            input.ValueRW.Movement = default;
+            input.ValueRW.PrimeFire = default;
+            
+            Vector2 movement = actions.Move.ReadValue<Vector2>();
+            float fire = actions.Fire.ReadValue<float>();
+
+            Vector3 direction = Camera.main.transform.rotation * Vector3.forward;
+            direction = new Vector3(direction.x, 0, direction.z).normalized;
+            Vector3 mov = Quaternion.FromToRotation(Vector3.forward, direction) * new Vector3(movement.x, 0, movement.y);
+            input.ValueRW.Movement = new float2(mov.x, mov.z);
+
+            input.ValueRW.Look.y = math.clamp(input.ValueRW.Look.y + _Look.y, -math.PI / 2, math.PI / 2);
+            input.ValueRW.Look.x = math.fmod(input.ValueRW.Look.x + _Look.x, 2 * math.PI);
+            if (fire != 0 && !hasFired)
             {
-                Debug.Log("Boom!");
-                input.fire.Set();
+                Debug.Log($"Fired at {SystemAPI.GetSingleton<NetworkTime>().ServerTick.ToFixedString()}");
+                input.ValueRW.PrimeFire.Set();
             }
-            var buffer = EntityManager.GetBuffer<PlayerInput>(entity);
-            buffer.AddCommandData(input);
+            hasFired = fire != 0;
+            _Look = Vector2.zero;
         };  
     }
     protected override void OnDestroy()

@@ -4,14 +4,15 @@ using Unity.NetCode;
 using UnityEngine;
 
 [GhostComponent(PrefabType = GhostPrefabType.AllPredicted, OwnerSendType = SendToOwnerType.SendToNonOwner)]
-public struct PlayerInput : ICommandData
+public struct PlayerInput : IInputComponentData
 {
     [GhostField] public NetworkTick Tick { get; set; }
-    [GhostField] public float2 movement;
-    [GhostField] public float2 look;
-    [GhostField] public InputEvent fire;
+    [GhostField] public float2 Movement;
+    [GhostField] public float2 Look;
+    [GhostField] public InputEvent PrimeFire;
+    [GhostField] public InputEvent SecondFire;
 
-    
+
 }
 
 public class PlayerInputAuthoring : MonoBehaviour
@@ -20,7 +21,7 @@ public class PlayerInputAuthoring : MonoBehaviour
     {
         public override void Bake(PlayerInputAuthoring authoring)
         {
-            AddBuffer<PlayerInput>(GetEntity(TransformUsageFlags.Dynamic));
+            AddComponent<PlayerInput>(GetEntity(TransformUsageFlags.Dynamic));
         }
     }
 }

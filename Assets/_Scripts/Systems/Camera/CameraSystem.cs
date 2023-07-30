@@ -3,14 +3,13 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Transforms;
-using UnityEngine;
 
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 [UpdateAfter(typeof(PresentationSystemGroup))]
 [BurstCompile]
 partial struct CameraSystem : ISystem
 {
-    public static readonly float3 k_CameraOffset = new float3(0, 2, -5);
+    public static readonly float3 Offset = new float3(0, 2, -5);
 
     [BurstCompile]
     public void OnCreate(ref SystemState state)
@@ -23,11 +22,11 @@ partial struct CameraSystem : ISystem
     {
         var camera = UnityEngine.Camera.main;
         
-        foreach (var (localToWorld, input) in SystemAPI.Query<RefRO<LocalToWorld>, RefRO<PlayerInput>>().WithAll<GhostOwnerIsLocal>())
+        foreach (var character in SystemAPI.Query<CharacterAspect>().WithAll<GhostOwnerIsLocal>())
         {
-            camera.transform.rotation = math.mul(quaternion.RotateY(input.ValueRO.Look.x), quaternion.RotateX(-input.ValueRO.Look.y));
-            var offset = math.rotate(camera.transform.rotation, k_CameraOffset);
-            camera.transform.position = localToWorld.ValueRO.Position + offset;
+            camera.transform.rotation = math.mul(quaternion.RotateY(character.Input.Look.x), quaternion.RotateX(-character.Input.Look.y));
+            var cameraPos = math.rotate(camera.transform.rotation, Offset);
+            camera.transform.position = character.Transform.ValueRO.Position + cameraPos;
         }
     }
 }

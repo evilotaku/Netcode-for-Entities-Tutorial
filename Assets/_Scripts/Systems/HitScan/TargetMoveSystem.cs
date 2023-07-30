@@ -16,13 +16,13 @@ public partial struct HitTargetMoveSystem : ISystem
     {
         var timeDeltaTime = SystemAPI.Time.DeltaTime;
 
-        foreach (var (trans, hitTarget) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<WeaponTarget>>())
+        foreach (var (transform, hitTarget) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<WeaponTarget>>())
 
         {
-            var deltaMove = timeDeltaTime * hitTarget.ValueRW.Speed;
+            var deltaMove = hitTarget.ValueRW.Speed * timeDeltaTime;
             hitTarget.ValueRW.Moved += deltaMove;
 
-            trans.ValueRW.Position.x += deltaMove;
+            transform.ValueRW.Position.x += deltaMove;
 
             if (math.abs(hitTarget.ValueRW.Moved) > hitTarget.ValueRW.MovingRange)
             {

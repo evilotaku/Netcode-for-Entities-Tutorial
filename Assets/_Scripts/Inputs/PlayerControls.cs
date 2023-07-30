@@ -116,7 +116,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""1137dcf0-b6bb-4f2f-9018-9dc4ec2120a2"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.05,y=0.05)"",
+                    ""processors"": ""ScaleVector2(x=0.01,y=0.01)"",
                     ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,

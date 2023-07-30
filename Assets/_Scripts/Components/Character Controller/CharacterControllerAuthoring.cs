@@ -9,7 +9,7 @@ public struct Character : IComponentData
     public Entity ControllerConfig;
 
     [GhostField(Quantization = 1000)]
-    public float3 Velocity;
+    public float3 MoveSpeed;
     [GhostField]
     public byte OnGround;
     [GhostField]

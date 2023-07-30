@@ -17,6 +17,6 @@ public readonly partial struct CharacterAspect : IAspect
     public AutoCommandTarget AutoCommandTarget => m_AutoCommandTarget.ValueRO;
     public PlayerInput Input => m_Input.ValueRO;
     public int OwnerNetworkId => m_Owner.ValueRO.NetworkId;
-    public ref Character Character => ref m_Character.ValueRW;
+    public ref Character Config => ref m_Character.ValueRW;
     public ref PhysicsVelocity Velocity => ref m_Velocity.ValueRW;
 }

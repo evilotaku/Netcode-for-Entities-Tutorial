@@ -52,7 +52,7 @@ public partial struct ShootingSystem : ISystem
             collisionHistory.GetCollisionWorldFromTick(predictingTick, delay, ref physicsWorld, out var collWorld);
 
             var cameraRotation = math.mul(quaternion.RotateY(character.Input.Look.x), quaternion.RotateX(-character.Input.Look.y));
-            var offset = math.rotate(cameraRotation, CameraSystem.k_CameraOffset);
+            var offset = math.rotate(cameraRotation, CameraSystem.Offset);
             var cameraPosition = character.Transform.ValueRO.Position + offset;
             var forward = math.mul(cameraRotation, math.forward());
             var rayInput = new RaycastInput

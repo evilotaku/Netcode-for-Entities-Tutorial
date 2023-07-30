@@ -41,7 +41,8 @@ public partial struct PlayerMoveJob : IJobEntity
     
     [BurstCompile]
     void Execute(CharacterAspect character)
-    {        
+    {
+        
         float3 direction = new(character.Input.Movement.x, 0, character.Input.Movement.y);
         if (math.lengthsq(direction) > 0.5)
         {

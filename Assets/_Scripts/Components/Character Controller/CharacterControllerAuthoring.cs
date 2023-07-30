@@ -1,3 +1,4 @@
+using System.Net.Security;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
@@ -27,8 +28,10 @@ public class CharacterControllerAuthoring : MonoBehaviour
             AddComponent(entity, new PlayerInput());
             AddComponent(entity, new Character
             {
-                ControllerConfig = GetEntity(authoring.ControllerConfig.gameObject, TransformUsageFlags.Dynamic)
+                ControllerConfig = GetEntity(authoring.ControllerConfig.gameObject, TransformUsageFlags.Dynamic),
+                MoveSpeed = authoring.ControllerConfig.Speed
             });
+            
 		}
 	}
 }

@@ -47,7 +47,6 @@ public partial class PlayerInputSystem : SystemBase
             input.ValueRW.Look.x = math.fmod(input.ValueRW.Look.x + _Look.x, 2 * math.PI);
             if (fire != 0 && !hasFired)
             {
-                Debug.Log($"Fired at {SystemAPI.GetSingleton<NetworkTime>().ServerTick.ToFixedString()}");
                 input.ValueRW.PrimeFire.Set();
             }
             hasFired = fire != 0;

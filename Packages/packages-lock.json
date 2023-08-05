@@ -9,6 +9,18 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.charactercontroller": {
+      "version": "1.0.0-exp.22",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.entities": "1.0.8",
+        "com.unity.physics": "1.0.8",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.physics": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.collab-proxy": {
       "version": "2.0.5",
       "depth": 0,

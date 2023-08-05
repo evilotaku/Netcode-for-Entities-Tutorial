@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.charactercontroller": "1.0.0-exp.22",
     "com.unity.collab-proxy": "2.0.5",
     "com.unity.entities.graphics": "1.0.10",
     "com.unity.ide.rider": "3.0.24",

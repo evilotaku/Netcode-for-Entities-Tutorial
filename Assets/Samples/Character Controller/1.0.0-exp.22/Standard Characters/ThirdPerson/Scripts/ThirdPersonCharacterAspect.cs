@@ -19,14 +19,19 @@ public struct ThirdPersonCharacterUpdateContext
     // Here, you may add additional global data for your character updates, such as ComponentLookups, Singletons, NativeCollections, etc...
     // The data you add here will be accessible in your character updates and all of your character "callbacks".
 
+    [ReadOnly]
+    public ComponentLookup<SpeedPad> SpeedPadLookup;
+
     public void OnSystemCreate(ref SystemState state)
     {
         // Get lookups
+        SpeedPadLookup = state.GetComponentLookup<SpeedPad>(true);
     }
 
     public void OnSystemUpdate(ref SystemState state)
     {
         // Update lookups
+        SpeedPadLookup.Update(ref state);
     }
 }
 
@@ -78,10 +83,19 @@ public readonly partial struct ThirdPersonCharacterAspect : IAspect, IKinematicC
             // Move on ground
             float3 targetVelocity = characterControl.MoveVector * characterComponent.GroundMaxSpeed;
 
+            //Sprint
             if(characterControl.Sprint)
             {
                 targetVelocity *= characterComponent.SprintSpeedMultiplier;
             }
+
+            //Speed Pad
+            if(context.SpeedPadLookup.TryGetComponent(characterBody.GroundHit.Entity, out SpeedPad speedPad)) 
+            {
+                targetVelocity *= speedPad.VelocityFactor;
+            }
+
+
 
             CharacterControlUtilities.StandardGroundMove_Interpolated(ref characterBody.RelativeVelocity, targetVelocity, characterComponent.GroundedMovementSharpness, deltaTime, characterBody.GroundingUp, characterBody.GroundHit.Normal);
 

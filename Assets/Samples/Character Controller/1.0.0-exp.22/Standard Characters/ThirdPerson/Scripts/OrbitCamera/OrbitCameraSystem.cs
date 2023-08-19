@@ -7,10 +7,10 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.CharacterController;
+using Unity.NetCode;
 
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(TransformSystemGroup))]
-[UpdateBefore(typeof(EndSimulationEntityCommandBufferSystem))]
+
+[UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
 public partial struct OrbitCameraSystem : ISystem
 {
     public struct CameraObstructionHitsCollector : ICollector<ColliderCastHit>
@@ -93,7 +93,7 @@ public partial struct OrbitCameraSystem : ISystem
     }
 
     [BurstCompile]
-    [WithAll(typeof(Simulate))]
+    [WithAll(typeof(Simulate), typeof(GhostOwnerIsLocal))]
     public partial struct OrbitCameraJob : IJobEntity
     {
         public float DeltaTime;

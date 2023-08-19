@@ -2,6 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.NetCode;
 
 [Serializable]
 public struct ThirdPersonPlayer : IComponentData
@@ -11,7 +12,7 @@ public struct ThirdPersonPlayer : IComponentData
 }
 
 [Serializable]
-public struct ThirdPersonPlayerInputs : IComponentData
+public struct ThirdPersonPlayerInputs : IInputComponentData
 {
     public float2 MoveInput;
     public float2 CameraLookInput;

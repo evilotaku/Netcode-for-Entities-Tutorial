@@ -54,8 +54,8 @@ public partial struct GoInGameServerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var prefab = SystemAPI.GetSingleton<PlayerPrefab>().Player;
-        state.EntityManager.GetName(prefab, out FixedString64Bytes prefabName);
+        var prefab = SystemAPI.GetSingleton<PlayerPrefab>();
+        state.EntityManager.GetName(prefab.Player, out FixedString64Bytes prefabName);
         FixedString128Bytes worldName = state.WorldUnmanaged.Name;
 
         var commandBuffer = new EntityCommandBuffer(Allocator.Temp);
@@ -68,9 +68,17 @@ public partial struct GoInGameServerSystem : ISystem
 
             Debug.Log($"'{worldName}' setting connection '{networkId.Value}' to in game, spawning a Ghost '{prefabName}' for them!");
 
-            Entity player = commandBuffer.Instantiate(prefab);
+            Entity player = commandBuffer.Instantiate(prefab.Player);
+            Entity character = commandBuffer.Instantiate(prefab.Character);
+            Entity camera = commandBuffer.Instantiate(prefab.Camera);
+
             commandBuffer.SetComponent(player, new GhostOwner { NetworkId = networkId.Value });
+            commandBuffer.SetComponent(player, new ThirdPersonPlayer { ControlledCharacter = character, ControlledCamera = camera });
+            commandBuffer.SetComponent(character, new GhostOwner { NetworkId = networkId.Value });
+            commandBuffer.SetComponent(camera, new GhostOwner { NetworkId = networkId.Value });
             commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = player });
+            commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = character });
+            commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = camera });
 
             commandBuffer.DestroyEntity(reqEntity);
         }

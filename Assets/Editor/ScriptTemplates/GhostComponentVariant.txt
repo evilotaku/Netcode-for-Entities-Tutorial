@@ -1,0 +1,10 @@
+using Unity.NetCode;
+
+#ROOTNAMESPACEBEGIN#
+[GhostComponentVariation(typeof(#SCRIPTNAME#))]
+[GhostComponent]
+public struct #SCRIPTNAME# 
+{
+
+}
+#ROOTNAMESPACEEND#

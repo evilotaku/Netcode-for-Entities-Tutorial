@@ -59,5 +59,13 @@ namespace WaynGroup.Mgm.Ability.Editor
                 "HybridComponent.cs");
         }
 
+        [MenuItem("Assets/Create/DOTS/Ghost Component Variation")]
+        public static void CreateGhostComponentVariation()
+        {
+            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(
+                $"Assets/Editor/ScriptTemplates/GhostComponentVariant.txt",
+                "GhostVariant.cs");
+        }
+
     }
 }

@@ -120,6 +120,18 @@ MonoBehaviour:
       HasMaxDownwardSlopeChangeAngle: 0
       MaxDownwardSlopeChangeAngle: 90
       ConstrainVelocityToGroundPlane: 1
+    MaxAirJumps: 0
+    CurrentAirJumps: 0
+    SprintSpeedMultiplier: 0
+    IgnoredPhysicsTags:
+      Tag00: 0
+      Tag01: 0
+      Tag02: 0
+      Tag03: 0
+      Tag04: 0
+      Tag05: 0
+      Tag06: 0
+      Tag07: 0
 --- !u!114 &7542772330835976783
 MonoBehaviour:
   m_ObjectHideFlags: 0

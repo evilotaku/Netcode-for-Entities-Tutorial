@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SimpleMaterial_White
+  m_Name: SimpleMaterial_Red
   m_Shader: {fileID: -6465566751694194690, guid: 2d40c85a2e8955d4ea370f6fd8c48a34,
     type: 3}
   m_Parent: {fileID: 0}
@@ -124,7 +124,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_cb3bb3be051d4782821489a356b18884: {r: 1, g: 1, b: 1, a: 1}
+    - Color_cb3bb3be051d4782821489a356b18884: {r: 1, g: 0, b: 0, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

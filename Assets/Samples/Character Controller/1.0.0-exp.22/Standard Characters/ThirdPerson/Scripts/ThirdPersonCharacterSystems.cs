@@ -8,6 +8,7 @@ using Unity.Transforms;
 using Unity.CharacterController;
 using Unity.Burst.Intrinsics;
 using Unity.Physics.Systems;
+using Unity.NetCode;
 
 [UpdateInGroup(typeof(KinematicCharacterPhysicsUpdateGroup))]
 [BurstCompile]
@@ -76,7 +77,8 @@ public partial struct ThirdPersonCharacterPhysicsUpdateSystem : ISystem
     }
 }
 
-[UpdateInGroup(typeof(KinematicCharacterVariableUpdateGroup))]
+[UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
+[UpdateAfter(typeof(PredictedFixedStepSimulationSystemGroup))]
 [BurstCompile]
 public partial struct ThirdPersonCharacterVariableUpdateSystem : ISystem
 {

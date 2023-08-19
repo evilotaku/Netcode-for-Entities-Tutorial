@@ -7,8 +7,9 @@ using Unity.Transforms;
 using UnityEngine;
 using Unity.Physics.Systems;
 using Unity.CharacterController;
+using Unity.NetCode;
 
-[UpdateInGroup(typeof(InitializationSystemGroup))]
+[UpdateInGroup(typeof(GhostInputSystemGroup))]
 public partial class ThirdPersonPlayerInputsSystem : SystemBase
 {
     protected override void OnCreate()
@@ -21,7 +22,7 @@ public partial class ThirdPersonPlayerInputsSystem : SystemBase
     {
         uint fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
 
-        foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<ThirdPersonPlayerInputs>, ThirdPersonPlayer>())
+        foreach (var playerInputs in SystemAPI.Query<RefRW<ThirdPersonPlayerInputs>>().WithAll<GhostOwnerIsLocal>())
         {
             playerInputs.ValueRW.MoveInput = new float2();
             playerInputs.ValueRW.MoveInput.y += Input.GetKey(KeyCode.W) ? 1f : 0f;
@@ -47,8 +48,8 @@ public partial class ThirdPersonPlayerInputsSystem : SystemBase
 /// <summary>
 /// Apply inputs that need to be read at a variable rate
 /// </summary>
-[UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
-[UpdateBefore(typeof(FixedStepSimulationSystemGroup))]
+[UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
+[UpdateBefore(typeof(ThirdPersonCharacterVariableUpdateSystem))]
 [BurstCompile]
 public partial struct ThirdPersonPlayerVariableStepControlSystem : ISystem
 {
@@ -84,7 +85,7 @@ public partial struct ThirdPersonPlayerVariableStepControlSystem : ISystem
 /// Apply inputs that need to be read at a fixed rate.
 /// It is necessary to handle this as part of the fixed step group, in case your framerate is lower than the fixed step rate.
 /// </summary>
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup), OrderFirst = true)]
+[UpdateInGroup(typeof(PredictedFixedStepSimulationSystemGroup), OrderFirst = true)]
 [BurstCompile]
 public partial struct ThirdPersonPlayerFixedStepControlSystem : ISystem
 {

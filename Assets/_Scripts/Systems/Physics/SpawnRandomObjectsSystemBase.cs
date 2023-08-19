@@ -80,7 +80,7 @@ abstract partial class SpawnRandomObjectsSystemBase<T> : SystemBase where T : un
         for (int i = 0; i < count; i++)
         {
             positions[i] = center + math.mul(orientation, random.NextFloat3(-range, range));
-            rotations[i] = math.mul(random.NextQuaternionRotation(), orientation);
+            rotations[i] = quaternion.identity; //math.mul(random.NextQuaternionRotation(), orientation);
         }
     }
 }

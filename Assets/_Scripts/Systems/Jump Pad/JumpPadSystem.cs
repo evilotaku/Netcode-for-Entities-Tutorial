@@ -1,4 +1,4 @@
-/*using Unity.Entities;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
@@ -47,4 +47,4 @@ public partial class JumpPadSystem : SystemBase
             }
         }
     }
-}*/
+}

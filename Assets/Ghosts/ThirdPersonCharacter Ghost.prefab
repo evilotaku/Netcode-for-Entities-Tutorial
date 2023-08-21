@@ -127,7 +127,7 @@ MonoBehaviour:
   prefabId: 383c791dd0f766e4892d85d25079badb
   HasOwner: 1
   SupportAutoCommandTarget: 1
-  TrackInterpolationDelay: 0
+  TrackInterpolationDelay: 1
   GhostGroup: 0
   UsePreSerialization: 0
 --- !u!114 &2735832615001552028

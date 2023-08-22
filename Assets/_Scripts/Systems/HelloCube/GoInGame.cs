@@ -72,10 +72,10 @@ public partial struct GoInGameServerSystem : ISystem
             Entity character = commandBuffer.Instantiate(prefab.Character);
             Entity camera = commandBuffer.Instantiate(prefab.Camera);
 
-            commandBuffer.SetComponent(player, new GhostOwner { NetworkId = networkId.Value });
-            commandBuffer.SetComponent(player, new ThirdPersonPlayer { ControlledCharacter = character, ControlledCamera = camera });
+            commandBuffer.SetComponent(player, new GhostOwner { NetworkId = networkId.Value });            
             commandBuffer.SetComponent(character, new GhostOwner { NetworkId = networkId.Value });
             commandBuffer.SetComponent(camera, new GhostOwner { NetworkId = networkId.Value });
+            commandBuffer.SetComponent(player, new ThirdPersonPlayer { ControlledCharacter = character, ControlledCamera = camera });
             commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = player });
             commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = character });
             commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup { Value = camera });

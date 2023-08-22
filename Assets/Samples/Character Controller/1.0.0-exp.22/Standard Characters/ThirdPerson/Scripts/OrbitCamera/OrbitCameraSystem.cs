@@ -43,7 +43,7 @@ public partial struct OrbitCameraSystem : ISystem
             {
                 return false;
             }
-        
+
             if (math.dot(hit.SurfaceNormal, _cameraDirection) < 0f || !PhysicsUtilities.IsCollidable(hit.Material))
             {
                 return false;
@@ -68,7 +68,7 @@ public partial struct OrbitCameraSystem : ISystem
             return true;
         }
     }
-    
+
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<PhysicsWorldSingleton>();
@@ -93,7 +93,7 @@ public partial struct OrbitCameraSystem : ISystem
     }
 
     [BurstCompile]
-    [WithAll(typeof(Simulate), typeof(GhostOwnerIsLocal))]
+    [WithAll(typeof(Simulate))]//, typeof(GhostOwnerIsLocal))]
     public partial struct OrbitCameraJob : IJobEntity
     {
         public float DeltaTime;

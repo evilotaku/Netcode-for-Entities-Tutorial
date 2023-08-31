@@ -13,6 +13,7 @@ using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
+using Unity.NetCode;
 
 public struct ThirdPersonCharacterUpdateContext
 {
@@ -40,6 +41,7 @@ public readonly partial struct ThirdPersonCharacterAspect : IAspect, IKinematicC
     public readonly KinematicCharacterAspect CharacterAspect;
     public readonly RefRW<ThirdPersonCharacterComponent> CharacterComponent;
     public readonly RefRW<ThirdPersonCharacterControl> CharacterControl;
+    public readonly RefRO<GhostOwner> GhostOwner;
 
     public void PhysicsUpdate(ref ThirdPersonCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext)
     {
@@ -135,6 +137,12 @@ public readonly partial struct ThirdPersonCharacterAspect : IAspect, IKinematicC
 
             // Drag
             CharacterControlUtilities.ApplyDragToVelocity(ref characterBody.RelativeVelocity, deltaTime, characterComponent.AirDrag);
+        }
+
+        //Fire Grenade
+        if(characterControl.Fire)
+        {
+
         }
     }
 

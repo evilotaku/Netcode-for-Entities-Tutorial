@@ -39,6 +39,10 @@ public partial class ThirdPersonPlayerInputsSystem : SystemBase
             {
                 playerInputs.ValueRW.JumpPressed.Set(fixedTick);
             }
+            if(Input.GetMouseButtonDown(0)) 
+            {
+                playerInputs.ValueRW.FirePressed.Set(fixedTick);
+            }
 
             playerInputs.ValueRW.SprintHeld = Input.GetKey(KeyCode.LeftShift);
         }
@@ -132,6 +136,8 @@ public partial struct ThirdPersonPlayerFixedStepControlSystem : ISystem
                 // We use the "FixedInputEvent" helper struct here to detect if the event needs to be processed.
                 // This is part of a strategy for proper handling of button press events that are consumed during the fixed update group.
                 characterControl.Jump = playerInputs.ValueRW.JumpPressed.IsSet(fixedTick);
+
+                characterControl.Fire = playerInputs.ValueRW.FirePressed.IsSet(fixedTick);
 
                 SystemAPI.SetComponent(player.ControlledCharacter, characterControl);
             }

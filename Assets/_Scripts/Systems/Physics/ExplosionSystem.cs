@@ -19,14 +19,13 @@ public partial struct ExplosionSystem : ISystem
     }
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
-    {
-        var ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-        var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
+    {        
+        var ecb = new EntityCommandBuffer(state.WorldUpdateAllocator);
         foreach (var (explosion, collider, transform, mass, velocity, entity) in SystemAPI.Query<RefRO<Exploded>, PhysicsCollider, RefRO<LocalTransform>, PhysicsMass, RefRW<PhysicsVelocity>>().WithEntityAccess())
         {
             velocity.ValueRW.ApplyExplosionForce(mass, collider, transform.ValueRO.Position, transform.ValueRO.Rotation, explosion.ValueRO.Force, explosion.ValueRO.Position, explosion.ValueRO.Radius, 1f, math.up(), 1f, ForceMode.Impulse);
             ecb.RemoveComponent<Exploded>(entity);
         }
-
+        ecb.Playback(state.EntityManager);
     }
 }

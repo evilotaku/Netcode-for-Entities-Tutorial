@@ -18,5 +18,6 @@ public struct ThirdPersonPlayerInputs : IInputComponentData
     public float2 CameraLookInput;
     public float CameraZoomInput;
     public FixedInputEvent JumpPressed;
+    public FixedInputEvent FirePressed;
     public bool SprintHeld;
 }

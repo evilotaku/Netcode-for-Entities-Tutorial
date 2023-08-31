@@ -2,6 +2,16 @@ using Unity.Burst;
 using Unity.Entities;
 
 #ROOTNAMESPACEBEGIN#
+
+[BurstCompile]
+partial struct #SCRIPTNAME#Job : IJobEntity
+{
+    public void Execute()
+    {
+
+    }
+}
+
 [BurstCompile]
 public partial struct #SCRIPTNAME# : ISystem
 {

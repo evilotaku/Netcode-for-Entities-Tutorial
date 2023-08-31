@@ -1745,6 +1745,7 @@ GameObject:
   - component: {fileID: 1242532802}
   - component: {fileID: 1242532800}
   - component: {fileID: 1242532799}
+  - component: {fileID: 1242532803}
   m_Layer: 0
   m_Name: Config
   m_TagString: Untagged
@@ -1818,6 +1819,23 @@ MonoBehaviour:
   m_EnableSolverStabilizationHeuristic: 0
   m_MultiThreaded: 1
   m_SynchronizeCollisionWorld: 1
+--- !u!114 &1242532803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242532798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82722d49ffa71b446a6a7549072d3fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialVelocity: 15
+  BlastTimer: 3
+  BlastRadius: 40
+  BlastPower: 10
+  ExplosionTimer: 1.9
 --- !u!1001 &1293117249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1957,7 +1975,7 @@ PrefabInstance:
     - target: {fileID: 6650819952887602759, guid: 7bf6f51d2faea9c47904426d996325f1,
         type: 3}
       propertyPath: m_Name
-      value: Player Prefab
+      value: Prefab List
       objectReference: {fileID: 0}
     - target: {fileID: 7592803272219104698, guid: 7bf6f51d2faea9c47904426d996325f1,
         type: 3}
@@ -1980,8 +1998,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6650819952887602759, guid: 7bf6f51d2faea9c47904426d996325f1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405174623}
   m_SourcePrefab: {fileID: 100100000, guid: 7bf6f51d2faea9c47904426d996325f1, type: 3}
+--- !u!1 &1405174622 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6650819952887602759, guid: 7bf6f51d2faea9c47904426d996325f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405174621}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1405174623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405174622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04184ec70602afb458d41ab62ab55e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grenade: {fileID: 2426053635565048318, guid: c97610927b9459145a6741d3cd5b3d49, type: 3}
+  Explosion: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
 --- !u!1 &1462657620
 GameObject:
   m_ObjectHideFlags: 0

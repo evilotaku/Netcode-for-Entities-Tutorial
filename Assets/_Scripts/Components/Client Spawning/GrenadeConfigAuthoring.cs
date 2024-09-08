@@ -12,7 +12,7 @@ public struct GrenadeConfig : IComponentData
 
 public class GrenadeConfigAuthoring : MonoBehaviour
 {
-    public int InitialVelocity = 15;
+    public int InitialVelocity = 30;
     public float BlastTimer = 3f;
     public int BlastRadius = 40;
     public int BlastPower = 10;

@@ -80,6 +80,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -7100157160936689749}
+    - targetCorrespondingSourceObject: {fileID: 4729649056687684238, guid: 65701a63aea96444fa3a4b2ed4edbb25,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4842641688990510316}
   m_SourcePrefab: {fileID: 100100000, guid: 65701a63aea96444fa3a4b2ed4edbb25, type: 3}
 --- !u!1 &9022336833416304492 stripped
 GameObject:
@@ -121,3 +125,21 @@ MonoBehaviour:
   TrackInterpolationDelay: 1
   GhostGroup: 0
   UsePreSerialization: 0
+--- !u!114 &-4842641688990510316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9022336833416304492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfdaa6c06fe64fbda2b16e07a4ee0b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ComponentOverrides:
+  - FullTypeName: Unity.Transforms.LocalTransform
+    EntityIndex: 0
+    PrefabType: -1
+    SendTypeOptimization: -1
+    VariantHash: 10188360468653526834

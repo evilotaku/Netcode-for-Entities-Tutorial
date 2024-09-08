@@ -252,6 +252,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448,
         type: 3}
+      propertyPath: Character.MaxAirJumps
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448,
+        type: 3}
       propertyPath: Character.StepAndSlopeHandling.StepHandling
       value: 1
       objectReference: {fileID: 0}
